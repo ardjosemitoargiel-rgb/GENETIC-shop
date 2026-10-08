@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GENETIC Admin</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="nav"><a class="brand" href="/">✦ GENETIC</a><span>ADMIN ORDERS</span></header>
+<main class="section">
+  <div style="max-width:900px;margin:auto">
+    <small>GENETIC / PRIVATE</small><h1>Orders</h1>
+    <div id="login"><input id="key" type="password" placeholder="Admin key" style="padding:14px;width:280px"><button class="primary" style="width:auto;margin-left:8px" onclick="start()">OPEN DASHBOARD</button></div>
+    <div id="dash" class="hidden"><button class="primary" style="width:auto;margin-bottom:18px" onclick="testNotification()">TEST MELDING 🔔</button><p id="notifyStatus" style="margin:0 0 18px"></p><div id="orders"></div></div>
+  </div>
+</main>
+<script>
+let key="",lastCount=null,notifyReady=false;
+const $=s=>document.querySelector(s);
+function money(n){return "$"+Number(n).toFixed(2)}
+async function start(){
+ key=$("#key").value;if(!key)return;
+ $("#login").classList.add("hidden");$("#dash").classList.remove("hidden");
+ if("Notification" in window){
+   try{ if(Notification.permission==="default") await Notification.requestPermission(); notifyReady=Notification.permission==="granted"; }catch(e){}
+ }
+ await refresh();setInterval(refresh,3000)
+}
+async function refresh(){
+ const r=await fetch("/api/admin/orders?key="+encodeURIComponent(key));
+ if(!r.ok){alert("Wrong admin key");location.reload();return}
+ const orders=await r.json();
+ if(lastCount!==null && orders.length>lastCount){
+   const newest=orders[0];
+   try{new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=").play()}catch(e){}
+   if("Notification" in window && Notification.permission==="granted"){
+     new Notification("GENETIC: nieuwe bestelling",{body:`${newest.customer.name} — ${money(newest.total)} (70%: ${money(newest.deposit)})`});
+   }
+ }
+ lastCount=orders.length;
+ $("#orders").innerHTML=orders.length?orders.map(o=>`<article style="background:#f2f1ed;color:#111;padding:24px;margin:16px 0"><div style="display:flex;justify-content:space-between"><b>${o.id}</b><span>${new Date(o.createdAt).toLocaleString()}</span></div><h3>${o.customer.name} · ${o.customer.phone}</h3><p>${o.customer.address}</p><p>${o.items.map(i=>i.name+" × "+i.quantity).join("<br>")}</p><p><b>Total ${money(o.total)}</b> · 70% ${money(o.deposit)} · 30% ${money(o.balance)}</p><select onchange="status('${o.id}',this.value)"><option ${o.status==="pending_deposit"?"selected":""} value="pending_deposit">Pending deposit</option><option ${o.status==="deposit_received"?"selected":""} value="deposit_received">Deposit received</option><option ${o.status==="ready_for_delivery"?"selected":""} value="ready_for_delivery">Ready for delivery</option><option ${o.status==="completed"?"selected":""} value="completed">Completed</option><option ${o.status==="cancelled"?"selected":""} value="cancelled">Cancelled</option></select></article>`).join(""):"<p>No orders yet.</p>";
+}
+async function status(id,status){await fetch("/api/admin/orders?key="+encodeURIComponent(key),{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,status})});refresh()}
+function testNotification(){
+ if(!("Notification" in window)){alert("Deze browser ondersteunt geen meldingen.");return}
+ if(Notification.permission!=="granted"){alert("Meldingen zijn niet toegestaan. Klik links van de adresbalk op de site-instellingen en zet Meldingen op Toestaan, en laad daarna deze pagina opnieuw.");return}
+ new Notification("GENETIC: testmelding 🔔",{body:"Meldingen werken. Je krijgt nu een melding wanneer een nieuwe order binnenkomt."});
+}
+</script>
+</body></html>

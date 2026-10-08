@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GENETIC — More Than Just Clothes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="/"><span class="spark">✦</span><span>GENETIC</span></a>
+  <nav><a href="#shop">SHOP</a><a href="#how">HOW IT WORKS</a><a href="#contact">CONTACT</a></nav>
+  <button class="bag" onclick="openBag()">BAG <b id="count">0</b></button>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <div class="mark">✦<br><strong>GENETIC</strong></div>
+    <p class="kicker">MORE THAN JUST CLOTHES</p>
+    <p>Curated everyday pieces for your style. Available exclusively in Suriname.</p>
+    <a class="outline" href="#shop">SHOP NOW →</a>
+  </div>
+  <div class="hero-pic">
+    <img src="/images/plum.jpg" alt="GENETIC hoodie">
+    <div class="hero-tag">SURINAME<br><span>ONLY</span></div>
+  </div>
+</section>
+
+<section id="shop" class="section">
+  <div class="section-title"><div><small>OUR COLLECTION</small><h1>THE DROP</h1></div><p>4 pieces · $50 each</p></div>
+  <div id="products" class="products"></div>
+</section>
+
+<section id="how" class="how section">
+  <div><small>ORDERING</small><h2>HOW IT WORKS</h2></div>
+  <div class="steps">
+    <div><b>01</b><h3>Choose your pieces</h3><p>Add your favorite GENETIC items to your bag.</p></div>
+    <div><b>02</b><h3>Place your order</h3><p>Enter your name, WhatsApp/phone and Suriname delivery address.</p></div>
+    <div><b>03</b><h3>Pay 70% upfront</h3><p>We confirm your bank-transfer details after your order is received.</p></div>
+    <div><b>04</b><h3>Receive your order</h3><p>The remaining 30% is paid at pickup/delivery, according to your agreed arrangement.</p></div>
+  </div>
+</section>
+
+<section class="payment">
+  <div><small>PAYMENT</small><h2>BANK TRANSFER</h2><p>GENETIC works with a <strong>70% deposit</strong>. After you place your order, you'll see the exact deposit and remaining balance.</p></div>
+  <div class="money"><span>70%</span><small>UPFRONT</small><hr><span>30%</span><small>REMAINING</small></div>
+</section>
+
+<footer id="contact"><div class="brand"><span class="spark">✦</span> GENETIC</div><p>GOOD FITS / REAL STYLE / SURINAME ONLY</p><p>© 2026 GENETIC</p></footer>
+
+<div id="bagModal" class="modal hidden"><div class="panel"><button class="x" onclick="closeBag()">×</button><h2>YOUR BAG</h2><div id="bagItems"></div><div class="total"><span>TOTAL</span><b id="total">$0.00</b></div><button class="primary" onclick="checkout()">CHECKOUT</button></div></div>
+
+<div id="checkoutModal" class="modal hidden"><div class="panel checkout"><button class="x" onclick="closeCheckout()">×</button><small>CHECKOUT</small><h2>YOUR ORDER</h2><div id="summary"></div>
+<form id="orderForm">
+<label>Full name<input name="name" required placeholder="Your name"></label>
+<label>WhatsApp / phone<input name="phone" required placeholder="+597 ..."></label>
+<label>Delivery address<input name="address" required placeholder="Street, district, etc."></label>
+<label>Notes (optional)<textarea name="notes" rows="3" placeholder="Size requests or delivery notes"></textarea></label>
+<input type="hidden" name="country" value="Suriname">
+<div class="paybox"><strong>Bankovermaking — 70% voorschot</strong><span id="depositText"></span></div>
+<button class="primary" type="submit">PLACE ORDER</button>
+</form><div id="confirmation" class="confirmation hidden"></div></div></div>
+
+<script src="/app.js"></script>
+</body></html>

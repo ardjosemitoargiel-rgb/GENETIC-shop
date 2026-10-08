@@ -1,0 +1,9 @@
+{
+  "name": "genetic-surinaime-shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GENETIC clothing webshop for Suriname",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
